@@ -1,0 +1,40 @@
+{
+  "name": "react-hooks-chrome-extension",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:mikecann/react-hooks-chrome-extension.git",
+  "author": "Mike Cann <mike.cann@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn build:resources && yarn build:scripts",
+    "build:resources": "cpx ./src/resources/**/*.* ./dist",
+    "build:scripts": "cross-env TS_NODE_PROJECT=\"tsconfig-webpack.json\" webpack",
+    "watch": "concurrently -n scripts,resources -c cyan,yellow \"yarn watch:scripts\" \"yarn watch:resources\"",
+    "watch:scripts": "yarn build:scripts --watch",
+    "watch:resources": "yarn build:resources && onchange src/resources/**/*.* -- yarn build:resources",
+    "dev": "yarn watch"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.75",
+    "@types/react": "^16.7.17",
+    "@types/react-dom": "^16.0.11",
+    "@types/node": "^10.12.15",
+    "awesome-typescript-loader": "^5.2.1",
+    "concurrently": "^4.1.0",
+    "cpx": "^1.5.0",
+    "cross-env": "^5.2.0",
+    "husky": "^1.2.1",
+    "onchange": "^5.2.0",
+    "prettier": "^1.15.3",
+    "pretty-quick": "^1.8.0",
+    "source-map-loader": "^0.2.4",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.2",
+    "webpack": "^4.27.1",
+    "webpack-cli": "^3.1.2"
+  },
+  "dependencies": {
+    "react": "^16.7.0-alpha.2",
+    "react-dom": "^16.7.0-alpha.2"
+  }
+}
