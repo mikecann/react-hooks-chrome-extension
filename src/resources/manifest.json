@@ -7,6 +7,12 @@
     "default_icon": "images/logo-128x128.png",
     "default_popup": "browserAction.html"
   },
+  "content_scripts": [
+    {
+      "matches": ["*"],
+      "js": ["contentScript-bundle.js"]
+    }
+  ],
   "icons": {
     "16": "images/logo-16x16.png",
     "48": "images/logo-48x48.png",

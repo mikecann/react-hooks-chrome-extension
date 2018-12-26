@@ -7,6 +7,7 @@ const config: Configuration = {
   entry: {
     background: "./src/scripts/background/index.tsx",
     settings: "./src/scripts/settings/index.tsx",
+    contentScript: "./src/scripts/contentScript/index.tsx",
     browserAction: "./src/scripts/browserAction/index.tsx"
   },
   output: {

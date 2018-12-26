@@ -16,9 +16,9 @@
   },
   "devDependencies": {
     "@types/chrome": "^0.0.75",
+    "@types/node": "^10.12.15",
     "@types/react": "^16.7.17",
     "@types/react-dom": "^16.0.11",
-    "@types/node": "^10.12.15",
     "awesome-typescript-loader": "^5.2.1",
     "concurrently": "^4.1.0",
     "cpx": "^1.5.0",
@@ -27,6 +27,7 @@
     "onchange": "^5.2.0",
     "prettier": "^1.15.3",
     "pretty-quick": "^1.8.0",
+    "react-test-renderer": "^16.7.0-alpha.2",
     "source-map-loader": "^0.2.4",
     "ts-node": "^7.0.1",
     "typescript": "^3.2.2",
