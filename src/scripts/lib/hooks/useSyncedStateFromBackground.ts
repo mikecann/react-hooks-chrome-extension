@@ -1,34 +1,37 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { usePorts, Port } from "./usePorts";
 import { messagingServiceFactory } from "../messaging";
 import { useDisposables } from "./useDisposables";
 
-export function useBackgroundSyncedState<T>(initialState: T) {
+export function useSyncedStateFromBackground<State>(
+  initialState: State,
+  logger = console.log
+): [State, React.Dispatch<React.SetStateAction<State>>] {
   // The app state
-  const [state, updateState] = useState<T>(initialState);
+  const [state, updateState] = useState<State>(initialState);
 
-  // Must dispose of listeners when we coose
+  // Must dispose of listeners when we close
   const dispose = useDisposables();
 
   // To prevent circular updates
   const justUpdatedPort = useRef<Port | undefined>(undefined);
 
   // Typesafe messaging library
-  const { current: messaging } = useRef(messagingServiceFactory<T>());
+  const { current: messaging } = useRef(messagingServiceFactory<State>());
 
   // Listen for ports connecting
-  const { ports, lastConnected } = usePorts();
+  const { ports, lastConnected } = usePorts(logger);
 
   // Only run this once a port connnects
   useEffect(
     () => {
       if (!lastConnected) return;
 
-      console.log("callback detected a port just connected", ports.length);
+      logger("callback detected a port just connected", ports.length);
 
       const disposable = messaging.listenForMessage(lastConnected, "state-update", msg => {
-        console.log("updating state..");
+        logger("updating state..");
         justUpdatedPort.current = lastConnected;
         updateState(msg.payload);
       });

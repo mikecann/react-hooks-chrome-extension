@@ -3,11 +3,12 @@ import { messagingServiceFactory } from "../messaging";
 
 let id = 0;
 
-export function useChildSyncedState<State>(pageName: string, initialState: State) {
+export function useSyncedStateFromChildPage<State>(
+  pageName: string,
+  initialState: State
+): [State, (state: Partial<State>) => void] {
   const [state, update] = useState<State>(initialState);
   const [port] = useState(() => chrome.runtime.connect({ name: pageName + id++ }));
-
-  // Typesafe messaging library
   const { current: messaging } = useRef(messagingServiceFactory<State>());
 
   useEffect(() => {
@@ -18,12 +19,12 @@ export function useChildSyncedState<State>(pageName: string, initialState: State
     };
   }, []);
 
-  return {
+  return [
     state,
-    update: (s: Partial<State>) => {
+    (s: Partial<State>) => {
       const newState: State = { ...state, ...s };
       messaging.updateState(port, newState);
       update(newState);
     }
-  };
+  ];
 }

@@ -1,0 +1,9 @@
+{
+  "testURL": "http://localhost",
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  "testMatch": ["**/?(*.)(spec|test).[tj]s?(x)"],
+  "testPathIgnorePatterns": ["integration.test", "node_modules"],
+  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
+}

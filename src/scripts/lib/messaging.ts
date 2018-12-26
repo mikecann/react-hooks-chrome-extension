@@ -17,23 +17,25 @@ export const messagingServiceFactory = <State, UserMessagePayloads = {}>() => {
     payload: Payloads[MessageType]
   ) => port.postMessage({ type, payload });
 
+  const listenForMessage = <MessageType extends keyof Payloads>(
+    port: Port,
+    type: MessageType,
+    listener: (msg: Messages[MessageType]) => void
+  ) => {
+    function onMessage(msg: any) {
+      if (msg.type == type) listener(msg);
+    }
+    port.onMessage.addListener(onMessage);
+    return () => port.onMessage.removeListener(onMessage);
+  };
+
+  const updateState = (port: Port, payload: Payloads["state-update"]) =>
+    postMessage(port, "state-update", payload);
+
   return {
     postMessage,
-
-    updateState: (port: Port, payload: Payloads["state-update"]) =>
-      postMessage(port, "state-update", payload),
-
-    listenForMessage: <MessageType extends keyof Payloads>(
-      port: Port,
-      type: MessageType,
-      listener: (msg: Messages[MessageType]) => void
-    ) => {
-      function onMessage(msg: any) {
-        if (msg.type == type) listener(msg);
-      }
-      port.onMessage.addListener(onMessage);
-      return () => port.onMessage.removeListener(onMessage);
-    }
+    updateState,
+    listenForMessage
   };
 };
 

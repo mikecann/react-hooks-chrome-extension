@@ -1,5 +1,5 @@
-import { useBackgroundSyncedState } from "../lib/hooks/useBackgroundSyncedState";
-import { useChildSyncedState } from "../lib/hooks/useChildSyncedState";
+import { useSyncedStateFromBackground } from "../lib/hooks/useSyncedStateFromBackground";
+import { useSyncedStateFromChildPage } from "../lib/hooks/useSyncedStateFromChildPage";
 
 export type ExtensionState = {
   count: number;
@@ -8,7 +8,7 @@ export type ExtensionState = {
 
 const initialState: ExtensionState = { count: 0, msg: "foo" };
 
-export const useBackgroundState = () => useBackgroundSyncedState<ExtensionState>(initialState);
+export const useSyncStateFromBg = () => useSyncedStateFromBackground<ExtensionState>(initialState);
 
-export const useChildState = (name: string) =>
-  useChildSyncedState<ExtensionState>(name, initialState);
+export const useSyncStateFromChild = (name: string) =>
+  useSyncedStateFromChildPage<ExtensionState>(name, initialState);

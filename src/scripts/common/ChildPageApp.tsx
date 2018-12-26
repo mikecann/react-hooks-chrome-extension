@@ -1,10 +1,9 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import { useState } from "react";
-import { useChildState } from "./state";
+import { useSyncStateFromChild } from "./state";
 
-function Child(props: { index: number; onRemove: () => void; name: string }) {
-  const { state, update } = useChildState(props.name);
+function MiniChildPage(props: { index: number; onRemove: () => void; name: string }) {
+  const [state, update] = useSyncStateFromChild(props.name);
 
   return (
     <div>
@@ -31,7 +30,7 @@ export function ChildPageApp(props: { name: string }) {
   return (
     <div>
       {children.map(c => (
-        <Child key={c} name={props.name} index={c} onRemove={() => removeChild(c)} />
+        <MiniChildPage key={c} name={props.name} index={c} onRemove={() => removeChild(c)} />
       ))}
       <button onClick={addChild}>Add Child</button>
     </div>

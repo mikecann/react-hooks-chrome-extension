@@ -5,13 +5,15 @@ export type Port = chrome.runtime.Port & { id: number; toString: () => string };
 
 let portId = 0;
 
+export const resetPortId = () => (portId = 0);
+
 type State = {
   ports: Port[];
   lastConnected?: Port | undefined;
   lastDisconnected?: Port | undefined;
 };
 
-export function usePorts() {
+export function usePorts(logger = console.log) {
   const [state, updateState] = useState<State>({
     ports: []
   });
@@ -22,12 +24,13 @@ export function usePorts() {
     port.id = portId++;
     port.toString = () => `[${port.id}] ${port.name}`;
 
-    console.log(`Port '${port}' connected`);
+    logger(`Port '${port}' connected`);
 
     updateState(prev => ({ ...prev, ports: [...prev.ports, port], lastConnected: port }));
 
     function onPortDisconnect(port: Port) {
-      console.log(`Port '${port}' disconnected`);
+      logger(`Port '${port}' disconnected`);
+      
       updateState(prev => ({
         ...prev,
         ports: prev.ports.filter(p => p != port),
