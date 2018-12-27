@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { useDisposables } from "./useDisposables";
 
-export type Port = chrome.runtime.Port & { id: number; toString: () => string };
+export type Port = chrome.runtime.Port & {
+  id: number;
+  toString: () => string;
+  isDisconnected: boolean | undefined;
+};
 
 let portId = 0;
 
@@ -26,11 +30,10 @@ export function usePorts(logger = console.log) {
 
     logger(`Port '${port}' connected`);
 
-    updateState(prev => ({ ...prev, ports: [...prev.ports, port], lastConnected: port }));
-
     function onPortDisconnect(port: Port) {
       logger(`Port '${port}' disconnected`);
-      
+      port.isDisconnected = true;
+
       updateState(prev => ({
         ...prev,
         ports: prev.ports.filter(p => p != port),
@@ -39,8 +42,9 @@ export function usePorts(logger = console.log) {
     }
 
     port.onDisconnect.addListener(onPortDisconnect);
-
     dispose(() => port.onDisconnect.removeListener(onPortDisconnect));
+
+    updateState(prev => ({ ...prev, ports: [...prev.ports, port], lastConnected: port }));
   }
 
   useEffect(() => {

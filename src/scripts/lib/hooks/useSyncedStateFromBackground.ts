@@ -46,7 +46,8 @@ export function useSyncedStateFromBackground<State>(
   // Run this if the state changes
   useEffect(
     () => {
-      for (const p of ports) if (p != justUpdatedPort.current) messaging.updateState(p, state);
+      for (const p of ports)
+        if (p != justUpdatedPort.current && !p.isDisconnected) messaging.updateState(p, state);
       justUpdatedPort.current = undefined;
     },
     [state]
