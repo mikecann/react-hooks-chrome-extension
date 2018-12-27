@@ -8,7 +8,7 @@ function MiniChildPage(props: { index: number; onRemove: () => void; name: strin
   return (
     <div>
       <p>
-        [{props.index}] clicked {state.count} times
+        [{props.index}] count: {state.count}
       </p>
       <button
         onClick={() => {
